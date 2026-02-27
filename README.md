@@ -1,87 +1,58 @@
-# CryptoSOS — On-Chain SOS Game (Solidity)
+# CryptoSOS — On-Chain SOS Game in Solidity
 
-A fully on-chain implementation of the classic SOS game built in Solidity for the Ethereum blockchain.
+An Ethereum smart contract implementation of the classic SOS game with built-in Ether incentives, timeout logic and security protections.
 
-Developed as part of the MSc in Computer Science (AUEB).
-
----
-
-## 🎮 Game Overview
-
-CryptoSOS is a two-player on-chain game where:
-
-- Players join by paying **1 ether**
-- A 3x3 board is created
-- Players alternately place **S** or **O**
-- The first to form "SOS" (horizontally, vertically, or diagonally) wins
-- If the board fills without "SOS", the game ends in a tie
+Developed as part of the MSc in Computer Science.
 
 ---
 
-## 💰 Incentive Mechanism
+## Core Features
 
-- Winner receives **1.8 ether**
-- Smart contract retains **0.2 ether**
-- In case of tie, each player receives **0.95 ether**
-- Owner can withdraw accumulated fees via `sweepBalance()`
-
----
-
-## ⏱ Timeout Logic
-
-- If second player does not join within 2 minutes → first player can `cancel()`
-- If a player delays move for 1 minute → opponent can call `tooslow()`
-- If no activity for 5 minutes → owner may terminate game (tie)
+- Fully on-chain game logic
+- 3-state finite state machine (Idle / Waiting / Active)
+- Bit-packed board representation (2 bits per cell)
+- Turn enforcement and square validation
+- Event-driven architecture
 
 ---
 
-## 📡 Events
+## Incentive Design
 
-- `StartGame(address, address)`
-- `Move(address, uint8, uint8)`
-- `Winner(address)`
-- `Tie(address, address)`
-
----
-
-## 🛡 Security Considerations
-
-The contract design considers:
-
-- Reentrancy risks in Ether transfers
-- Proper use of `require()` validations
-- State updates before transfers
-- Controlled owner-only functions
-- Gas optimization in storage usage
-- Prevention of self-play
+- 1 ETH deposit per player
+- 1.8 ETH reward for winner
+- 0.95 ETH refund each in case of tie
+- Timeout win logic
+- Owner withdrawal via sweepBalance()
 
 ---
 
-## 🧠 Design Notes
+## Security Measures
 
-The contract was designed to:
-- Minimize storage operations
-- Keep board representation compact
-- Emit clear event logs for off-chain monitoring
-- Enforce strict game state transitions
-
----
-
-## 🛠 Tech Stack
-
-- Solidity
-- Ethereum Virtual Machine (EVM)
+- Reentrancy guard
+- Checks-Effects-Interactions pattern
+- Strict phase validation
+- Self-play prevention
+- Timestamp tolerance analysis
+- Gas-aware storage packing
 
 ---
 
-## 📂 Project Structure
+## Technical Design Highlights
 
-- `contracts/` — Solidity smart contract implementation
-- `docs/` — Design notes and additional documentation
-- `assets/` — Diagrams or visual explanations
+- Board stored in uint32 (gas optimization)
+- Helper functions for cell access
+- State reset before transfers
+- Time-based logic enforced via callable functions
 
 ---
 
-## 📌 Status
+## Repository Structure
 
-Academic project — completed.
+- `contracts/` – Smart contract implementation
+- `docs/` – Design decisions and security analysis
+
+---
+
+## Status
+
+Academic project – completed.
